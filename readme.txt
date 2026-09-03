@@ -1,8 +1,8 @@
-=== Bahri Canli Connect ===
+=== BahriCanli Connect ===
 Contributors: bahricanli
 Tags: whatsapp, business messaging, inbox, customer support, crm
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 7.1
 Requires PHP: 8.0
 Stable tag: 0.1.0
 License: GPLv2 or later
