@@ -1,0 +1,7 @@
+# `git archive` (scripts/build-zip.sh) ile üretilen yayın zip'inden hariç tutulanlar.
+# .git zaten hiçbir zaman dahil edilmez.
+/.gitattributes  export-ignore
+/.gitignore      export-ignore
+/.github         export-ignore
+/scripts         export-ignore
+/README.md       export-ignore
