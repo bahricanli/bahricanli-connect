@@ -80,9 +80,16 @@ class BC_Admin {
 	 * @return array
 	 */
 	public function sanitize_settings( $input ) {
+		$existing = get_option( 'bahricanli_connect_settings', array() );
+
 		$out             = array();
 		$out['api_base'] = isset( $input['api_base'] ) ? esc_url_raw( trim( $input['api_base'] ) ) : '';
-		$out['api_key']  = isset( $input['api_key'] ) ? sanitize_text_field( trim( $input['api_key'] ) ) : '';
+
+		// Anahtar formda hiç gösterilmez. Alan boş bırakıldıysa kayıtlı anahtar korunur.
+		$submitted_key  = isset( $input['api_key'] ) ? sanitize_text_field( trim( $input['api_key'] ) ) : '';
+		$out['api_key'] = '' !== $submitted_key
+			? $submitted_key
+			: ( isset( $existing['api_key'] ) ? (string) $existing['api_key'] : '' );
 
 		if ( '' === $out['api_base'] ) {
 			$out['api_base'] = BAHRICANLI_CONNECT_DEFAULT_API;
@@ -111,7 +118,7 @@ class BC_Admin {
 		wp_enqueue_script(
 			'bahricanli-connect-admin',
 			BAHRICANLI_CONNECT_URL . 'assets/js/admin.js',
-			array( 'wp-i18n' ),
+			array(),
 			BAHRICANLI_CONNECT_VERSION,
 			true
 		);

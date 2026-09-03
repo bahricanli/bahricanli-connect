@@ -46,10 +46,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 						id="bc_api_key"
 						name="bahricanli_connect_settings[api_key]"
 						class="regular-text"
-						value="<?php echo esc_attr( $settings['api_key'] ); ?>"
+						value=""
 						autocomplete="off"
+						placeholder="<?php echo '' !== $settings['api_key']
+							? esc_attr__( 'Kayıtlı — değiştirmek için yeni anahtar girin', 'bahricanli-connect' )
+							: 'mm_xxxxxxxx.xxxxxxxxxxxxxxxx'; ?>"
 					/>
-					<p class="description"><?php esc_html_e( 'Örn: mm_xxxxxxxx.xxxxxxxxxxxxxxxx', 'bahricanli-connect' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'Anahtar güvenlik için formda hiçbir zaman gösterilmez. Boş bırakırsanız kayıtlı anahtar korunur.', 'bahricanli-connect' ); ?>
+					</p>
 				</td>
 			</tr>
 			<tr>
