@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Bahri Canlı Connect
- * Plugin URI:        https://message-manager.tr
+ * Plugin URI:        https://message-manager.tr/wordpress-plugin
  * Description:        WhatsApp Business gelen kutusu ve mesajlaşma — Message Manager platformuna bağlanır.
  * Version:           0.1.0
  * Requires at least: 6.0
