@@ -1,0 +1,153 @@
+.bc-wrap {
+	max-width: 1100px;
+}
+
+.bc-test-result {
+	margin-left: 10px;
+	font-weight: 600;
+}
+.bc-test-result.is-ok {
+	color: #128c7e;
+}
+.bc-test-result.is-err {
+	color: #b32d2e;
+}
+
+/* Gelen kutusu */
+.bc-inbox {
+	display: grid;
+	grid-template-columns: 300px 1fr;
+	gap: 0;
+	height: 68vh;
+	margin-top: 16px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.bc-inbox__list {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	border-right: 1px solid #e9e9ea;
+}
+
+.bc-inbox__filters {
+	display: flex;
+	gap: 4px;
+	padding: 8px;
+	border-bottom: 1px solid #e9e9ea;
+}
+.bc-filter {
+	flex: 1;
+	padding: 6px 10px;
+	border: 0;
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+	font-weight: 600;
+	color: #50575e;
+}
+.bc-filter.is-active {
+	background: #16a34a;
+	color: #fff;
+}
+
+.bc-inbox__conversations {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	margin: 0;
+}
+.bc-inbox__conversations li {
+	margin: 0;
+}
+.bc-inbox__empty {
+	padding: 16px;
+	color: #8c8f94;
+}
+
+.bc-conv {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 2px 8px;
+	width: 100%;
+	padding: 10px 14px;
+	border: 0;
+	border-bottom: 1px solid #f0f0f1;
+	background: transparent;
+	text-align: left;
+	cursor: pointer;
+}
+.bc-conv.is-active {
+	background: #f0fdf4;
+}
+.bc-conv__name {
+	font-weight: 600;
+	color: #1d2327;
+}
+.bc-conv__wa {
+	grid-column: 1 / -1;
+	font-size: 12px;
+	color: #8c8f94;
+}
+.bc-badge {
+	align-self: center;
+	background: #16a34a;
+	color: #fff;
+	border-radius: 999px;
+	padding: 0 7px;
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.bc-inbox__thread {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+.bc-inbox__placeholder {
+	margin: auto;
+	color: #8c8f94;
+}
+
+.bc-thread__messages {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	padding: 16px;
+	background: #f6f7f7;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.bc-msg {
+	max-width: 72%;
+	padding: 8px 12px;
+	border-radius: 8px;
+	font-size: 13px;
+	line-height: 1.4;
+	word-break: break-word;
+}
+.bc-msg--in {
+	align-self: flex-start;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+}
+.bc-msg--out {
+	align-self: flex-end;
+	background: #16a34a;
+	color: #fff;
+}
+
+.bc-thread__composer {
+	display: flex;
+	gap: 8px;
+	padding: 12px;
+	border-top: 1px solid #e9e9ea;
+}
+.bc-thread__composer textarea {
+	flex: 1;
+	resize: vertical;
+}
