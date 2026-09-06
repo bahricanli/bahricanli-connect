@@ -11,18 +11,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BC_Ajax
+ * Class BAHRCO_Ajax
  */
-class BC_Ajax {
+class BAHRCO_Ajax {
 
 	/**
 	 * Hook'ları bağla.
 	 */
 	public function register() {
-		add_action( 'wp_ajax_bc_test_connection', array( $this, 'test_connection' ) );
-		add_action( 'wp_ajax_bc_conversations', array( $this, 'conversations' ) );
-		add_action( 'wp_ajax_bc_messages', array( $this, 'messages' ) );
-		add_action( 'wp_ajax_bc_send_message', array( $this, 'send_message' ) );
+		add_action( 'wp_ajax_bahrco_test_connection', array( $this, 'test_connection' ) );
+		add_action( 'wp_ajax_bahrco_conversations', array( $this, 'conversations' ) );
+		add_action( 'wp_ajax_bahrco_messages', array( $this, 'messages' ) );
+		add_action( 'wp_ajax_bahrco_send_message', array( $this, 'send_message' ) );
 	}
 
 	/**
@@ -32,7 +32,7 @@ class BC_Ajax {
 	private function guard() {
 		check_ajax_referer( 'bahricanli_connect', 'nonce' );
 
-		if ( ! current_user_can( BC_Admin::CAPABILITY ) ) {
+		if ( ! current_user_can( BAHRCO_Admin::CAPABILITY ) ) {
 			wp_send_json_error( array( 'message' => __( 'Yetkisiz.', 'bahricanli-connect' ) ), 403 );
 		}
 	}
@@ -67,7 +67,7 @@ class BC_Ajax {
 		$base = '' !== $raw_base ? $raw_base : null;
 		$key  = '' !== $raw_key ? $raw_key : null;
 
-		$client = new BC_Api_Client( $base, $key );
+		$client = new BAHRCO_Api_Client( $base, $key );
 		$this->respond( $client->ping() );
 	}
 
@@ -84,7 +84,7 @@ class BC_Ajax {
 			'per_page' => isset( $_POST['per_page'] ) ? absint( wp_unslash( $_POST['per_page'] ) ) : 50,
 		);
 
-		$this->respond( ( new BC_Api_Client() )->conversations( $args ) );
+		$this->respond( ( new BAHRCO_Api_Client() )->conversations( $args ) );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class BC_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Geçersiz konuşma.', 'bahricanli-connect' ) ), 400 );
 		}
 
-		$this->respond( ( new BC_Api_Client() )->messages( $id, array( 'per_page' => 200 ) ) );
+		$this->respond( ( new BAHRCO_Api_Client() )->messages( $id, array( 'per_page' => 200 ) ) );
 	}
 
 	/**
@@ -118,6 +118,6 @@ class BC_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Konuşma ve mesaj gövdesi gerekli.', 'bahricanli-connect' ) ), 400 );
 		}
 
-		$this->respond( ( new BC_Api_Client() )->send_message( $id, $body ) );
+		$this->respond( ( new BAHRCO_Api_Client() )->send_message( $id, $body ) );
 	}
 }

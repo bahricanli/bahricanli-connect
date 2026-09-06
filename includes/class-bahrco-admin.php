@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BC_Admin
+ * Class BAHRCO_Admin
  */
-class BC_Admin {
+class BAHRCO_Admin {
 
 	const CAPABILITY = 'manage_options';
 
@@ -141,7 +141,7 @@ class BC_Admin {
 			return;
 		}
 
-		if ( ! BC_Plugin::is_configured() ) {
+		if ( ! BAHRCO_Plugin::is_configured() ) {
 			require BAHRICANLI_CONNECT_DIR . 'admin/views/not-configured.php';
 			return;
 		}
@@ -157,7 +157,7 @@ class BC_Admin {
 			return;
 		}
 
-		$settings = BC_Plugin::settings();
+		$settings = BAHRCO_Plugin::settings();
 		require BAHRICANLI_CONNECT_DIR . 'admin/views/settings.php';
 	}
 }

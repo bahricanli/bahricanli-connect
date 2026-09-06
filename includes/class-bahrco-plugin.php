@@ -10,31 +10,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BC_Plugin
+ * Class BAHRCO_Plugin
  */
-final class BC_Plugin {
+final class BAHRCO_Plugin {
 
 	/**
 	 * Tekil örnek.
 	 *
-	 * @var BC_Plugin|null
+	 * @var BAHRCO_Plugin|null
 	 */
 	private static $instance = null;
 
 	/**
-	 * @var BC_Admin
+	 * @var BAHRCO_Admin
 	 */
 	public $admin;
 
 	/**
-	 * @var BC_Ajax
+	 * @var BAHRCO_Ajax
 	 */
 	public $ajax;
 
 	/**
 	 * Tekil erişim.
 	 *
-	 * @return BC_Plugin
+	 * @return BAHRCO_Plugin
 	 */
 	public static function instance() {
 		if ( null === self::$instance ) {
@@ -48,21 +48,13 @@ final class BC_Plugin {
 	 * Kurucu — bileşenleri oluşturur ve hook'ları bağlar.
 	 */
 	private function __construct() {
-		$this->admin = new BC_Admin();
-		$this->ajax  = new BC_Ajax();
+		$this->admin = new BAHRCO_Admin();
+		$this->ajax  = new BAHRCO_Ajax();
 
-		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( BAHRICANLI_CONNECT_FILE ), array( $this, 'action_links' ) );
 
 		$this->admin->register();
 		$this->ajax->register();
-	}
-
-	/**
-	 * Çeviri dosyalarını yükle.
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain( 'bahricanli-connect', false, dirname( plugin_basename( BAHRICANLI_CONNECT_FILE ) ) . '/languages' );
 	}
 
 	/**

@@ -32,9 +32,9 @@
 			result.textContent = '…';
 			result.className = 'bc-test-result';
 
-			post( 'bc_test_connection', {
-				api_base: ( document.getElementById( 'bc_api_base' ) || {} ).value || '',
-				api_key: ( document.getElementById( 'bc_api_key' ) || {} ).value || '',
+			post( 'bahrco_test_connection', {
+				api_base: ( document.getElementById( 'bahrco_api_base' ) || {} ).value || '',
+				api_key: ( document.getElementById( 'bahrco_api_key' ) || {} ).value || '',
 			} ).then( function ( res ) {
 				if ( res.ok ) {
 					result.textContent = '✓ ' + 'Bağlantı başarılı';
@@ -64,7 +64,7 @@
 	}
 
 	function loadConversations() {
-		post( 'bc_conversations', { status: state.status } ).then( function ( res ) {
+		post( 'bahrco_conversations', { status: state.status } ).then( function ( res ) {
 			if ( ! res.ok ) {
 				listEl.innerHTML = '<li class="bc-inbox__empty">' + esc( res.json.data && res.json.data.message ) + '</li>';
 				return;
@@ -90,7 +90,7 @@
 		state.conversationId = id;
 		threadEl.innerHTML = '<p class="bc-inbox__placeholder">Yükleniyor…</p>';
 
-		post( 'bc_messages', { conversation_id: id } ).then( function ( res ) {
+		post( 'bahrco_messages', { conversation_id: id } ).then( function ( res ) {
 			if ( ! res.ok ) {
 				threadEl.innerHTML = '<p class="bc-inbox__placeholder">' + esc( res.json.data && res.json.data.message ) + '</p>';
 				return;
@@ -119,7 +119,7 @@
 					return;
 				}
 				ta.disabled = true;
-				post( 'bc_send_message', { conversation_id: id, body: body } ).then( function ( r ) {
+				post( 'bahrco_send_message', { conversation_id: id, body: body } ).then( function ( r ) {
 					ta.disabled = false;
 					if ( r.ok ) {
 						ta.value = '';

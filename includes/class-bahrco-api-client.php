@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BC_Api_Client
+ * Class BAHRCO_Api_Client
  */
-class BC_Api_Client {
+class BAHRCO_Api_Client {
 
 	/**
 	 * @var string
@@ -32,7 +32,7 @@ class BC_Api_Client {
 	 * @param string|null $key  Tenant API anahtarı (varsayılan: kayıtlı ayar).
 	 */
 	public function __construct( $base = null, $key = null ) {
-		$settings   = BC_Plugin::settings();
+		$settings   = BAHRCO_Plugin::settings();
 		$this->base = null !== $base ? untrailingslashit( $base ) : $settings['api_base'];
 		$this->key  = null !== $key ? $key : $settings['api_key'];
 	}
@@ -92,7 +92,7 @@ class BC_Api_Client {
 	 */
 	private function request( $method, $path, $data = array() ) {
 		if ( '' === $this->key ) {
-			return new WP_Error( 'bc_not_configured', __( 'API anahtarı ayarlanmamış.', 'bahricanli-connect' ) );
+			return new WP_Error( 'bahrco_not_configured', __( 'API anahtarı ayarlanmamış.', 'bahricanli-connect' ) );
 		}
 
 		$url  = $this->base . $path;
@@ -131,6 +131,6 @@ class BC_Api_Client {
 			? $body['message']
 			: sprintf( /* translators: %d: HTTP status code */ __( 'API hatası (HTTP %d)', 'bahricanli-connect' ), $code );
 
-		return new WP_Error( 'bc_api_error', $message, array( 'status' => $code, 'body' => $body ) );
+		return new WP_Error( 'bahrco_api_error', $message, array( 'status' => $code, 'body' => $body ) );
 	}
 }

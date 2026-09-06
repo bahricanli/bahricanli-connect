@@ -23,12 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row">
-					<label for="bc_api_base"><?php esc_html_e( 'API adresi', 'bahricanli-connect' ); ?></label>
+					<label for="bahrco_api_base"><?php esc_html_e( 'API adresi', 'bahricanli-connect' ); ?></label>
 				</th>
 				<td>
 					<input
 						type="url"
-						id="bc_api_base"
+						id="bahrco_api_base"
 						name="bahricanli_connect_settings[api_base]"
 						class="regular-text"
 						value="<?php echo esc_attr( $settings['api_base'] ); ?>"
@@ -38,12 +38,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</tr>
 			<tr>
 				<th scope="row">
-					<label for="bc_api_key"><?php esc_html_e( 'API anahtarı', 'bahricanli-connect' ); ?></label>
+					<label for="bahrco_api_key"><?php esc_html_e( 'API anahtarı', 'bahricanli-connect' ); ?></label>
 				</th>
 				<td>
 					<input
 						type="password"
-						id="bc_api_key"
+						id="bahrco_api_key"
 						name="bahricanli_connect_settings[api_key]"
 						class="regular-text"
 						value=""

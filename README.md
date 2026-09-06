@@ -13,17 +13,18 @@ Bu repo: `git@github.com:bahricanli/bahricanli-connect.git`
 - Tüm çağrılar **sunucu tarafında** (`wp_remote_request`) yapılır; API anahtarı
   tarayıcıya düşmez.
 - `admin-ajax.php` proxy uçları nonce + `manage_options` doğrular:
-  `bc_test_connection`, `bc_conversations`, `bc_messages`, `bc_send_message`.
+  `bahrco_test_connection`, `bahrco_conversations`, `bahrco_messages`,
+  `bahrco_send_message`.
 
 ## Dosya yapısı
 
 ```
 bahricanli-connect.php          Ana dosya (header + bootstrap)
 includes/
-  class-bc-plugin.php           Tekil örnek, hook kaydı, ayar okuma
-  class-bc-api-client.php        Çekirdek API istemcisi (wp_remote_*)
-  class-bc-admin.php             Menü, ayar kaydı, sayfa çıktıları, asset
-  class-bc-ajax.php              admin-ajax proxy uçları
+  class-bahrco-plugin.php       Tekil örnek, hook kaydı, ayar okuma
+  class-bahrco-api-client.php    Çekirdek API istemcisi (wp_remote_*)
+  class-bahrco-admin.php         Menü, ayar kaydı, sayfa çıktıları, asset
+  class-bahrco-ajax.php          admin-ajax proxy uçları
 admin/views/                     settings / inbox / not-configured
 assets/js/admin.js               Ayar testi + gelen kutusu (vanilla JS)
 assets/css/admin.css

@@ -1,10 +1,10 @@
 === BahriCanli Connect ===
-Contributors: bahricanli
+Contributors: bmericc
 Tags: whatsapp, business messaging, inbox, customer support, crm
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.0
+Stable tag: 0.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,10 @@ No. Messages are fetched from the Message Manager API on demand and are not writ
 to your WordPress database.
 
 == Changelog ==
+
+= 0.1.1 =
+* Unique `bahrco`/`BAHRCO` prefix for all class names and AJAX actions.
+* Removed the unnecessary `load_plugin_textdomain()` call.
 
 = 0.1.0 =
 * Initial release: settings, connection test, inbox (list + reply).
