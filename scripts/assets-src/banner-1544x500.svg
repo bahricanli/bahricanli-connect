@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1544" height="500" viewBox="0 0 1544 500">
+  <defs><clipPath id="frame"><rect width="1544" height="500"/></clipPath></defs>
+  <g clip-path="url(#frame)">
+    <rect width="1544" height="500" fill="#12A150"/>
+    <polygon points="1250,0 1544,0 1544,500 1090,500" fill="#0E7C3E"/>
+    <text x="80" y="238" font-family="Liberation Sans, Arial, sans-serif" font-weight="bold" font-size="104" fill="#ffffff">BahriCanli Connect</text>
+    <rect x="84" y="274" width="430" height="7" fill="#ffffff"/>
+    <text x="84" y="340" font-family="Liberation Sans, Arial, sans-serif" font-weight="normal" font-size="40" fill="#ffffff" fill-opacity="0.82">message-manager.tr icin resmi WordPress eklentisi</text>
+    <text x="1476" y="286" text-anchor="end" font-family="Liberation Sans, Arial, sans-serif" font-weight="bold" font-size="140" fill="#ffffff">MM</text>
+  </g>
+</svg>
