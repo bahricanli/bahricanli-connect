@@ -1,0 +1,11 @@
+# Files and directories excluded from the WordPress.org SVN build
+# (10up/action-wordpress-plugin-deploy reads this; it also drives scripts/build-zip.sh parity).
+.git
+.github
+.distignore
+.gitattributes
+.gitignore
+.wordpress-org
+README.md
+scripts
+*.zip
