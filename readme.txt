@@ -4,7 +4,7 @@ Tags: whatsapp, business messaging, inbox, customer support, crm
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,7 +79,15 @@ revoke it at any time from the Message Manager panel.
 No. Messages are fetched from the Message Manager API on demand and are not written
 to your WordPress database.
 
+== Screenshots ==
+
+1. Team inbox — open/closed conversations, message thread and reply box, inside wp-admin.
+2. Settings — enter the Message Manager API address and per-account API key, test the connection.
+
 == Changelog ==
+
+= 0.1.2 =
+* Added plugin directory assets (banner, icon) and screenshots.
 
 = 0.1.1 =
 * Unique `bahrco`/`BAHRCO` prefix for all class names and AJAX actions.

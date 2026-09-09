@@ -11,10 +11,11 @@ See https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
 | `icon-128x128.png` | 128×128 | Plugin directory icon (fallback) | present |
 | `banner-1544x500.png` | 1544×500 | Plugin page banner (hi-DPI) | present |
 | `banner-772x250.png` | 772×250 | Plugin page banner | present |
-| `screenshot-1.png` | any | Matches `== Screenshots ==` line 1 in `readme.txt` | TODO |
+| `screenshot-1.png` | 1280×849 | wp-admin **Connect → Gelen Kutusu** (thread + reply); contact name/number blurred | present |
+| `screenshot-2.png` | 1280×849 | wp-admin **Connect → Ayarlar** (API address + key + test) | present |
 
 Icon + banners are the Message Manager green `MM` mark, matching the
 `bahricanli-publisher` asset style. Sources: `scripts/assets-src/*.svg` —
 regenerate the PNGs with `scripts/build-assets.sh` (needs Inkscape).
-`screenshot-1.png` (a wp-admin **Connect → Inbox** capture) still needs to be
-added, along with a `== Screenshots ==` section in `readme.txt`.
+Screenshots are captured from a live pkd.org.tr install; personal data
+(contact names, phone numbers) is blurred before commit.

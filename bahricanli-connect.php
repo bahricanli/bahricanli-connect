@@ -3,7 +3,7 @@
  * Plugin Name:       BahriCanli Connect
  * Plugin URI:        https://message-manager.tr/wordpress-plugin
  * Description:        WhatsApp Business team inbox for WordPress. Connects to the Message Manager platform to read and reply to customer conversations.
- * Version:           0.1.1
+ * Version:           0.1.2
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Bahri Canlı
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BAHRICANLI_CONNECT_VERSION', '0.1.1' );
+define( 'BAHRICANLI_CONNECT_VERSION', '0.1.2' );
 define( 'BAHRICANLI_CONNECT_FILE', __FILE__ );
 define( 'BAHRICANLI_CONNECT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BAHRICANLI_CONNECT_URL', plugin_dir_url( __FILE__ ) );
