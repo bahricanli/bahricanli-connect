@@ -4,7 +4,7 @@ Tags: whatsapp, business messaging, inbox, customer support, crm
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,9 @@ to your WordPress database.
 2. Settings — enter the Message Manager API address and per-account API key, test the connection.
 
 == Changelog ==
+
+= 0.1.3 =
+* Added a WordPress Playground blueprint so the plugin directory "Live Preview" opens on the settings screen.
 
 = 0.1.2 =
 * Added plugin directory assets (banner, icon) and screenshots.

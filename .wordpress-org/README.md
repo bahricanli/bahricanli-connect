@@ -19,3 +19,11 @@ Icon + banners are the Message Manager green `MM` mark, matching the
 regenerate the PNGs with `scripts/build-assets.sh` (needs Inkscape).
 Screenshots are captured from a live pkd.org.tr install; personal data
 (contact names, phone numbers) is blurred before commit.
+
+## blueprints/blueprint.json
+
+Enables the plugin directory "Live Preview" (WordPress Playground). Minimal: boots
+`wp latest` / PHP 8.2, logs in as admin, lands on **Connect → Ayarlar**. The plugin
+itself is auto-installed/activated by the directory — no `installPlugin` step here.
+The inbox needs a real Message Manager API key, so the preview only shows settings.
+Deployed to SVN `assets/blueprints/blueprint.json` by the tag workflow.
