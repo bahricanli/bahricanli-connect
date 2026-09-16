@@ -50,6 +50,15 @@ class BAHRCO_Admin {
 
 		add_submenu_page(
 			'bahricanli-connect',
+			__( 'Mesaj Gönder', 'bahricanli-connect' ),
+			__( 'Mesaj Gönder', 'bahricanli-connect' ),
+			self::CAPABILITY,
+			'bahricanli-connect-send',
+			array( $this, 'render_send' )
+		);
+
+		add_submenu_page(
+			'bahricanli-connect',
 			__( 'Ayarlar', 'bahricanli-connect' ),
 			__( 'Ayarlar', 'bahricanli-connect' ),
 			self::CAPABILITY,
@@ -147,6 +156,22 @@ class BAHRCO_Admin {
 		}
 
 		require BAHRICANLI_CONNECT_DIR . 'admin/views/inbox.php';
+	}
+
+	/**
+	 * Şablonla yeni mesaj gönderme sayfası.
+	 */
+	public function render_send() {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			return;
+		}
+
+		if ( ! BAHRCO_Plugin::is_configured() ) {
+			require BAHRICANLI_CONNECT_DIR . 'admin/views/not-configured.php';
+			return;
+		}
+
+		require BAHRICANLI_CONNECT_DIR . 'admin/views/send.php';
 	}
 
 	/**

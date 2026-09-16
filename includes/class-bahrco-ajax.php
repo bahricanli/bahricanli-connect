@@ -23,6 +23,10 @@ class BAHRCO_Ajax {
 		add_action( 'wp_ajax_bahrco_conversations', array( $this, 'conversations' ) );
 		add_action( 'wp_ajax_bahrco_messages', array( $this, 'messages' ) );
 		add_action( 'wp_ajax_bahrco_send_message', array( $this, 'send_message' ) );
+		add_action( 'wp_ajax_bahrco_templates', array( $this, 'templates' ) );
+		add_action( 'wp_ajax_bahrco_send_template', array( $this, 'send_template' ) );
+		add_action( 'wp_ajax_bahrco_archive', array( $this, 'archive' ) );
+		add_action( 'wp_ajax_bahrco_send_new_template', array( $this, 'send_new_template' ) );
 	}
 
 	/**
@@ -119,5 +123,96 @@ class BAHRCO_Ajax {
 		}
 
 		$this->respond( ( new BAHRCO_Api_Client() )->send_message( $id, $body ) );
+	}
+
+	/**
+	 * Onaylı şablonları listele.
+	 */
+	public function templates() {
+		$this->guard();
+		$this->respond( ( new BAHRCO_Api_Client() )->templates() );
+	}
+
+	/**
+	 * POST 'params' alanındaki JSON değişken listesini doğrula ve temizle.
+	 * Geçersizse isteği sonlandırır.
+	 *
+	 * @param string $missing_message Liste eksik/bozuksa gösterilecek mesaj.
+	 * @return string[]
+	 */
+	private function template_params( $missing_message ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce guard() içinde doğrulanır; JSON aşağıda çözülüp her öğe temizlenir.
+		$raw_params = isset( $_POST['params'] ) && is_string( $_POST['params'] ) ? wp_unslash( $_POST['params'] ) : '';
+		$params     = json_decode( $raw_params, true );
+
+		if ( ! is_array( $params ) || '[' !== substr( ltrim( $raw_params ), 0, 1 ) ) {
+			wp_send_json_error( array( 'message' => $missing_message ), 400 );
+		}
+		foreach ( $params as $param ) {
+			if ( ! is_string( $param ) ) {
+				wp_send_json_error( array( 'message' => __( 'Değişkenler metin olmalıdır.', 'bahricanli-connect' ) ), 400 );
+			}
+		}
+
+		return array_map( 'sanitize_textarea_field', $params );
+	}
+
+	/**
+	 * Seçili konuşmaya şablon gönder.
+	 */
+	public function send_template() {
+		$this->guard();
+
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce, self::guard() içinde doğrulanır.
+		$id          = isset( $_POST['conversation_id'] ) ? absint( wp_unslash( $_POST['conversation_id'] ) ) : 0;
+		$template_id = isset( $_POST['template_id'] ) ? absint( wp_unslash( $_POST['template_id'] ) ) : 0;
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$missing = __( 'Konuşma, şablon ve değişken listesi gerekli.', 'bahricanli-connect' );
+
+		if ( $id <= 0 || $template_id <= 0 ) {
+			wp_send_json_error( array( 'message' => $missing ), 400 );
+		}
+		$params = $this->template_params( $missing );
+
+		$this->respond( ( new BAHRCO_Api_Client() )->send_template( $id, $template_id, $params ) );
+	}
+
+	/**
+	 * Konuşmayı arşivle / arşivden çıkar.
+	 */
+	public function archive() {
+		$this->guard();
+
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce, self::guard() içinde doğrulanır.
+		$id       = isset( $_POST['conversation_id'] ) ? absint( wp_unslash( $_POST['conversation_id'] ) ) : 0;
+		$archived = isset( $_POST['archived'] ) && '1' === sanitize_key( wp_unslash( $_POST['archived'] ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+
+		if ( $id <= 0 ) {
+			wp_send_json_error( array( 'message' => __( 'Geçersiz konuşma.', 'bahricanli-connect' ) ), 400 );
+		}
+
+		$this->respond( ( new BAHRCO_Api_Client() )->set_archived( $id, $archived ) );
+	}
+
+	/**
+	 * Telefon numarasına onaylı şablonla yeni mesaj gönder.
+	 */
+	public function send_new_template() {
+		$this->guard();
+
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce, self::guard() içinde doğrulanır.
+		$to       = isset( $_POST['to'] ) ? sanitize_text_field( wp_unslash( $_POST['to'] ) ) : '';
+		$template = isset( $_POST['template'] ) ? sanitize_text_field( wp_unslash( $_POST['template'] ) ) : '';
+		$language = isset( $_POST['language'] ) ? sanitize_text_field( wp_unslash( $_POST['language'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$missing = __( 'Telefon numarası, şablon ve değişken listesi gerekli.', 'bahricanli-connect' );
+
+		if ( '' === trim( $to ) || '' === $template ) {
+			wp_send_json_error( array( 'message' => $missing ), 400 );
+		}
+		$params = $this->template_params( $missing );
+
+		$this->respond( ( new BAHRCO_Api_Client() )->send_template_to( $to, $template, $language, $params ) );
 	}
 }

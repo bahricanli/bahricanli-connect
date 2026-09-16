@@ -4,7 +4,7 @@ Tags: whatsapp, business messaging, inbox, customer support, crm
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,9 @@ the WordPress admin area, through the Message Manager platform
 
 * Shared team inbox — incoming and outgoing WhatsApp messages
 * Reply to customer conversations without leaving WordPress
-* 24-hour customer service window awareness
+* Live 24-hour customer service window countdown
+* Send approved message templates, in a conversation or to a new phone number
+* Archive conversations
 
 The plugin is a thin client. It stores no message data of its own. All business
 logic and the connection to the Meta WhatsApp Business Platform (Cloud API) run on
@@ -31,18 +33,23 @@ browser.
 This plugin connects to one external service: the **Message Manager API** at
 `https://message-manager.tr`. A connection is made only after you enter an API key
 on the plugin settings screen, and only while a logged-in administrator is using
-the plugin's screens (Settings, Inbox).
+the plugin's screens (Settings, Inbox, Send Message).
 
 What is sent to Message Manager:
 
 * Your API key, in the `Authorization` request header, to authenticate the request.
 * When you open a conversation: the conversation identifier you selected.
 * When you send a reply: the conversation identifier and the message text you typed.
+* When you send a template: the template identifier/name and language, the variable
+  values you typed, and either the conversation identifier or the recipient phone number.
+* When you archive or unarchive a conversation: the conversation identifier.
+* When you open a template form: a request for your approved template list.
 
 What is received from Message Manager and shown in wp-admin:
 
 * The list of your WhatsApp conversations (contact name/number, status, unread count).
 * The messages of a conversation you open (text, direction, delivery status, timestamps).
+* Your approved message templates (name, language, body text).
 
 Message Manager, in turn, communicates with the Meta WhatsApp Business Platform
 (Cloud API) on your behalf to deliver and receive those messages. No data is sent
@@ -85,6 +92,12 @@ to your WordPress database.
 2. Settings — enter the Message Manager API address and per-account API key, test the connection.
 
 == Changelog ==
+
+= 0.1.4 =
+* Send approved WhatsApp templates from a conversation (also after the 24-hour window closes).
+* New "Mesaj Gönder" page: start a conversation with any phone number using an approved template.
+* Archive and unarchive conversations; new "Arşiv" filter in the inbox.
+* Live 24-hour customer service window countdown above the message composer.
 
 = 0.1.3 =
 * Added a WordPress Playground blueprint so the plugin directory "Live Preview" opens on the settings screen.

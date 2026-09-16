@@ -83,6 +83,67 @@ class BAHRCO_Api_Client {
 	}
 
 	/**
+	 * Onaylı mesaj şablonları.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function templates() {
+		return $this->request( 'GET', '/api/v1/templates', array( 'status' => 'approved' ) );
+	}
+
+	/**
+	 * Seçili konuşmaya şablon gönder.
+	 *
+	 * @param int   $conversation_id Konuşma kimliği.
+	 * @param int   $template_id     Şablon kimliği.
+	 * @param array $params          Sıralı gövde değişkenleri.
+	 * @return array|WP_Error
+	 */
+	public function send_template( $conversation_id, $template_id, $params ) {
+		return $this->request(
+			'POST',
+			'/api/v1/conversations/' . (int) $conversation_id . '/templates',
+			array( 'template_id' => (int) $template_id, 'params' => array_values( $params ) )
+		);
+	}
+
+	/**
+	 * Konuşmayı arşivle ya da arşivden çıkar.
+	 *
+	 * @param int  $conversation_id Konuşma kimliği.
+	 * @param bool $archived        true: arşivle, false: arşivden çıkar.
+	 * @return array|WP_Error
+	 */
+	public function set_archived( $conversation_id, $archived ) {
+		return $this->request(
+			'POST',
+			'/api/v1/conversations/' . (int) $conversation_id . ( $archived ? '/archive' : '/unarchive' )
+		);
+	}
+
+	/**
+	 * Telefon numarasına onaylı şablonla yeni mesaj gönder.
+	 *
+	 * @param string $to       Alıcı telefon numarası.
+	 * @param string $template Şablon adı.
+	 * @param string $language Şablon dili.
+	 * @param array  $params   Sıralı gövde değişkenleri.
+	 * @return array|WP_Error
+	 */
+	public function send_template_to( $to, $template, $language, $params ) {
+		return $this->request(
+			'POST',
+			'/api/v1/messages',
+			array(
+				'to'       => $to,
+				'template' => $template,
+				'language' => $language,
+				'params'   => array_values( $params ),
+			)
+		);
+	}
+
+	/**
 	 * Ham HTTP isteği.
 	 *
 	 * @param string $method GET|POST.

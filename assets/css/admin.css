@@ -151,3 +151,92 @@
 	flex: 1;
 	resize: vertical;
 }
+
+/* Şablon mesajı */
+.bc-template-panel {
+	flex-shrink: 0;
+	max-height: 280px;
+	overflow-y: auto;
+	padding: 12px;
+	border-top: 1px solid #e9e9ea;
+}
+.bc-template-panel summary {
+	cursor: pointer;
+	font-weight: 600;
+	color: #128c7e;
+}
+.bc-template-panel label,
+.bc-template-panel select,
+.bc-template-panel input {
+	display: block;
+	width: 100%;
+	margin: 6px 0;
+}
+.bc-template-preview {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	background: #f0fdf4;
+	padding: 10px;
+	margin-top: 10px;
+}
+.bc-template-error {
+	color: #b32d2e;
+}
+.bc-template-success {
+	color: #128c7e;
+	font-weight: 600;
+}
+
+/* Konuşma başlığı (arşiv) */
+.bc-thread__header {
+	display: flex;
+	justify-content: flex-end;
+	padding: 8px 12px;
+	border-bottom: 1px solid #e9e9ea;
+}
+
+/* 24 saatlik yanıt süresi sayacı */
+.bc-window-timer {
+	flex-shrink: 0;
+	padding: 8px 12px 0;
+	border-top: 1px solid #e9e9ea;
+	font-size: 12px;
+	color: #50575e;
+}
+.bc-window-timer strong {
+	font-family: monospace;
+}
+.bc-window-timer.is-urgent {
+	color: #b32d2e;
+}
+.bc-window-timer.is-expired {
+	color: #996800;
+}
+.bc-window-timer + .bc-thread__composer {
+	border-top: 0;
+}
+
+/* Mesaj Gönder sayfası */
+.bc-send {
+	max-width: 560px;
+	margin-top: 16px;
+	padding: 16px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+}
+.bc-send > label {
+	display: block;
+	font-weight: 600;
+}
+.bc-send #bc-send-to {
+	width: 100%;
+	margin: 6px 0 0;
+}
+.bc-send .bc-template-form label,
+.bc-send .bc-template-form select,
+.bc-send .bc-template-form input {
+	display: block;
+	width: 100%;
+	margin: 6px 0;
+}

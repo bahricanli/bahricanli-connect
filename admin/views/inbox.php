@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="bc-inbox__filters">
 				<button type="button" class="bc-filter is-active" data-status="open"><?php esc_html_e( 'Açık', 'bahricanli-connect' ); ?></button>
 				<button type="button" class="bc-filter" data-status="closed"><?php esc_html_e( 'Kapalı', 'bahricanli-connect' ); ?></button>
+				<button type="button" class="bc-filter" data-status="archived"><?php esc_html_e( 'Arşiv', 'bahricanli-connect' ); ?></button>
 			</div>
 			<ul class="bc-inbox__conversations" id="bc-conversations">
 				<li class="bc-inbox__empty"><?php esc_html_e( 'Yükleniyor…', 'bahricanli-connect' ); ?></li>
