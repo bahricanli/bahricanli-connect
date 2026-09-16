@@ -261,7 +261,10 @@
 			var msgs = ( res.json.data && res.json.data.data ) || [];
 			var rows = msgs.map( function ( m ) {
 				var dir = m.direction === 'out' ? 'out' : 'in';
-				return '<div class="bc-msg bc-msg--' + dir + '"><span>' + esc( m.body || ( '[' + m.type + ']' ) ) + '</span></div>';
+				var text = m.body || ( 'unsupported' === m.type
+					? '⚠ Bu mesaj türü WhatsApp Cloud API tarafından desteklenmiyor; Meta içeriğini iletmedi (ör. kopyalanabilir doğrulama kodu mesajları).'
+					: '[' + m.type + ']' );
+				return '<div class="bc-msg bc-msg--' + dir + '"><span>' + esc( text ) + '</span></div>';
 			} ).join( '' );
 			var conversation = state.conversations[ id ] || {};
 			var archived = !! conversation.archived_at;

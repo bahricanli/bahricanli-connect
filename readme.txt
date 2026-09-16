@@ -4,7 +4,7 @@ Tags: whatsapp, business messaging, inbox, customer support, crm
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.4
+Stable tag: 0.1.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,9 @@ to your WordPress database.
 2. Settings — enter the Message Manager API address and per-account API key, test the connection.
 
 == Changelog ==
+
+= 0.1.5 =
+* Show a clear notice for messages WhatsApp Cloud API does not deliver (unsupported type, e.g. copy-code verification messages) instead of "[unsupported]".
 
 = 0.1.4 =
 * Send approved WhatsApp templates from a conversation (also after the 24-hour window closes).
