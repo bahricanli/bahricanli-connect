@@ -88,6 +88,12 @@ class BAHRCO_Ajax {
 			'per_page' => isset( $_POST['per_page'] ) ? absint( wp_unslash( $_POST['per_page'] ) ) : 50,
 		);
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce, self::guard() içinde doğrulanır.
+		$channel = isset( $_POST['channel'] ) ? sanitize_key( wp_unslash( $_POST['channel'] ) ) : '';
+		if ( in_array( $channel, array( 'whatsapp', 'sms' ), true ) ) {
+			$args['channel'] = $channel;
+		}
+
 		$this->respond( ( new BAHRCO_Api_Client() )->conversations( $args ) );
 	}
 
@@ -108,7 +114,7 @@ class BAHRCO_Ajax {
 	}
 
 	/**
-	 * Mesaj gönder.
+	 * Mesaj gönder (SMS konuşmasında isteğe bağlı kısa ad ile).
 	 */
 	public function send_message() {
 		$this->guard();
@@ -117,12 +123,14 @@ class BAHRCO_Ajax {
 		$id = isset( $_POST['conversation_id'] ) ? absint( wp_unslash( $_POST['conversation_id'] ) ) : 0;
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce, self::guard() içinde doğrulanır.
 		$body = isset( $_POST['body'] ) ? sanitize_textarea_field( wp_unslash( $_POST['body'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce, self::guard() içinde doğrulanır.
+		$sender_header = isset( $_POST['sender_header'] ) ? sanitize_text_field( wp_unslash( $_POST['sender_header'] ) ) : '';
 
 		if ( $id <= 0 || '' === trim( $body ) ) {
 			wp_send_json_error( array( 'message' => __( 'Konuşma ve mesaj gövdesi gerekli.', 'bahricanli-connect' ) ), 400 );
 		}
 
-		$this->respond( ( new BAHRCO_Api_Client() )->send_message( $id, $body ) );
+		$this->respond( ( new BAHRCO_Api_Client() )->send_message( $id, $body, $sender_header ) );
 	}
 
 	/**

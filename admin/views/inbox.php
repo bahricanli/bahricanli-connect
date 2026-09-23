@@ -19,6 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<button type="button" class="bc-filter" data-status="closed"><?php esc_html_e( 'Kapalı', 'bahricanli-connect' ); ?></button>
 				<button type="button" class="bc-filter" data-status="archived"><?php esc_html_e( 'Arşiv', 'bahricanli-connect' ); ?></button>
 			</div>
+			<div class="bc-inbox__filters bc-inbox__channels">
+				<button type="button" class="bc-channel is-active" data-channel=""><?php esc_html_e( 'Tümü', 'bahricanli-connect' ); ?></button>
+				<button type="button" class="bc-channel" data-channel="whatsapp"><?php esc_html_e( 'WhatsApp', 'bahricanli-connect' ); ?></button>
+				<button type="button" class="bc-channel" data-channel="sms"><?php esc_html_e( 'SMS', 'bahricanli-connect' ); ?></button>
+			</div>
 			<ul class="bc-inbox__conversations" id="bc-conversations">
 				<li class="bc-inbox__empty"><?php esc_html_e( 'Yükleniyor…', 'bahricanli-connect' ); ?></li>
 			</ul>

@@ -1,14 +1,14 @@
 === BahriCanli Connect ===
 Contributors: bmericc
-Tags: whatsapp, business messaging, inbox, customer support, crm
+Tags: whatsapp, sms, business messaging, inbox, customer support
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.5
+Stable tag: 0.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A WhatsApp Business team inbox inside WordPress. Connects to the Message Manager platform to read and reply to customer conversations.
+A WhatsApp Business and SMS team inbox inside WordPress. Connects to the Message Manager platform to read and reply to customer conversations.
 
 == Description ==
 
@@ -17,6 +17,8 @@ the WordPress admin area, through the Message Manager platform
 (https://message-manager.tr):
 
 * Shared team inbox — incoming and outgoing WhatsApp messages
+* SMS conversations in the same inbox (SMS accounts connected on Message Manager),
+  with a WhatsApp / SMS filter and sender name (short name) selection for replies
 * Reply to customer conversations without leaving WordPress
 * Live 24-hour customer service window countdown
 * Send approved message templates, in a conversation or to a new phone number
@@ -39,7 +41,9 @@ What is sent to Message Manager:
 
 * Your API key, in the `Authorization` request header, to authenticate the request.
 * When you open a conversation: the conversation identifier you selected.
-* When you send a reply: the conversation identifier and the message text you typed.
+* When you send a reply: the conversation identifier and the message text you typed;
+  for SMS conversations also the sender name (short name) you selected.
+* When you filter the inbox: the selected channel (WhatsApp or SMS).
 * When you send a template: the template identifier/name and language, the variable
   values you typed, and either the conversation identifier or the recipient phone number.
 * When you archive or unarchive a conversation: the conversation identifier.
@@ -47,12 +51,14 @@ What is sent to Message Manager:
 
 What is received from Message Manager and shown in wp-admin:
 
-* The list of your WhatsApp conversations (contact name/number, status, unread count).
+* The list of your WhatsApp and SMS conversations (contact name/number, channel, status,
+  unread count) and, for SMS conversations, the approved sender names of the SMS account.
 * The messages of a conversation you open (text, direction, delivery status, timestamps).
 * Your approved message templates (name, language, body text).
 
 Message Manager, in turn, communicates with the Meta WhatsApp Business Platform
-(Cloud API) on your behalf to deliver and receive those messages. No data is sent
+(Cloud API) and with the SMS provider you connected on Message Manager (for example
+Netgsm) on your behalf to deliver and receive those messages. No data is sent
 to any other third party. Message Manager does not sell or share your data.
 
 * Message Manager website: https://message-manager.tr
@@ -66,7 +72,7 @@ to any other third party. Message Manager does not sell or share your data.
 1. Upload the plugin to `/wp-content/plugins/bahricanli-connect` and activate it.
 2. Go to **Connect > Settings** and enter the API key from your Message Manager
    account, then click **Test connection**.
-3. Open **Connect > Inbox** to read and reply to WhatsApp conversations.
+3. Open **Connect > Inbox** to read and reply to WhatsApp and SMS conversations.
 
 == Frequently Asked Questions ==
 
@@ -92,6 +98,10 @@ to your WordPress database.
 2. Settings — enter the Message Manager API address and per-account API key, test the connection.
 
 == Changelog ==
+
+= 0.1.6 =
+* SMS conversations in the inbox, with a WhatsApp / SMS channel filter and channel labels.
+* Reply to SMS conversations with a selectable sender name (short name); no 24-hour window or templates for SMS.
 
 = 0.1.5 =
 * Show a clear notice for messages WhatsApp Cloud API does not deliver (unsupported type, e.g. copy-code verification messages) instead of "[unsupported]".

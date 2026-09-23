@@ -68,17 +68,24 @@ class BAHRCO_Api_Client {
 	}
 
 	/**
-	 * Serbest metin mesajı gönder.
+	 * Serbest metin mesajı gönder (WhatsApp veya SMS konuşması).
 	 *
 	 * @param int    $conversation_id Konuşma kimliği.
 	 * @param string $body            Mesaj gövdesi.
+	 * @param string $sender_header   Yalnız SMS: kısa ad (boşsa hesabın varsayılanı).
 	 * @return array|WP_Error
 	 */
-	public function send_message( $conversation_id, $body ) {
+	public function send_message( $conversation_id, $body, $sender_header = '' ) {
+		$data = array( 'body' => $body );
+
+		if ( '' !== $sender_header ) {
+			$data['sender_header'] = $sender_header;
+		}
+
 		return $this->request(
 			'POST',
 			'/api/v1/conversations/' . (int) $conversation_id . '/messages',
-			array( 'body' => $body )
+			$data
 		);
 	}
 

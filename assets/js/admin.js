@@ -181,12 +181,12 @@
 		return;
 	}
 
-	var state = { status: 'open', conversationId: null, threadVersion: 0, conversations: {} };
+	var state = { status: 'open', channel: '', conversationId: null, threadVersion: 0, conversations: {} };
 	var listEl = document.getElementById( 'bc-conversations' );
 	var threadEl = document.getElementById( 'bc-thread' );
 
 	function loadConversations() {
-		post( 'bahrco_conversations', { status: state.status } ).then( function ( res ) {
+		post( 'bahrco_conversations', { status: state.status, channel: state.channel } ).then( function ( res ) {
 			if ( ! res.ok ) {
 				listEl.innerHTML = '<li class="bc-inbox__empty">' + esc( res.json.data && res.json.data.message ) + '</li>';
 				return;
@@ -205,14 +205,24 @@
 				var active = c.id === state.conversationId ? ' is-active' : '';
 				var badge = c.unread_count > 0 ? '<span class="bc-badge">' + c.unread_count + '</span>' : '';
 				return '<li><button type="button" class="bc-conv' + active + '" data-id="' + c.id + '">' +
-					'<span class="bc-conv__name">' + esc( name ) + '</span>' + badge +
+					'<span class="bc-conv__name">' + channelTag( c ) + esc( name ) + '</span>' + badge +
 					'<span class="bc-conv__wa">' + esc( c.contact && c.contact.wa_id ) + '</span>' +
 					'</button></li>';
 			} ).join( '' );
 		} );
 	}
 
-	/* 24 saatlik yanıt penceresi: window_expires_at = son gelen mesaj + 24 saat */
+	function isSms( c ) {
+		return !! c && 'sms' === c.channel;
+	}
+
+	function channelTag( c ) {
+		return isSms( c )
+			? '<span class="bc-channel-tag bc-channel-tag--sms">SMS</span>'
+			: '<span class="bc-channel-tag bc-channel-tag--whatsapp">WA</span>';
+	}
+
+	/* 24 saatlik yanıt penceresi: window_expires_at = son gelen mesaj + 24 saat (yalnız WhatsApp) */
 	function windowRemainingMs( id ) {
 		var c = state.conversations[ id ];
 		return c && c.window_expires_at ? new Date( c.window_expires_at ).getTime() - Date.now() : 0;
@@ -268,36 +278,59 @@
 			} ).join( '' );
 			var conversation = state.conversations[ id ] || {};
 			var archived = !! conversation.archived_at;
+			var sms = isSms( conversation );
+			var headers = ( sms && conversation.sms_account && conversation.sms_account.sender_headers ) || [];
+			var defaultHeader = ( sms && conversation.sms_account && conversation.sms_account.sender_header ) || '';
+			var headerSelect = sms
+				? '<div class="bc-sms-header"><label for="bc-sender-header">Kısa ad</label>' +
+					'<select id="bc-sender-header"' + ( headers.length ? '' : ' disabled' ) + '>' +
+					( headers.length
+						? headers.map( function ( h ) {
+							return '<option value="' + esc( h ) + '"' + ( h === defaultHeader ? ' selected' : '' ) + '>' + esc( h ) + '</option>';
+						} ).join( '' )
+						: '<option value="">Onaylı kısa ad yok — Message Manager › Ayarlar › SMS</option>' ) +
+					'</select><span class="bc-sms-header__count" id="bc-sms-count">0 karakter</span></div>'
+				: '';
 
 			threadEl.innerHTML =
-				'<div class="bc-thread__header">' +
+				'<div class="bc-thread__header">' + channelTag( conversation ) +
 				'<button type="button" class="button" id="bc-archive">' + ( archived ? 'Arşivden çıkar' : 'Arşivle' ) + '</button>' +
 				'</div>' +
 				'<div class="bc-thread__messages" id="bc-thread-messages">' + rows + '</div>' +
-				'<details class="bc-template-panel"' + ( windowRemainingMs( id ) > 0 ? '' : ' open' ) + '><summary>Şablon mesajı</summary>' +
+				( sms ? headerSelect : '<details class="bc-template-panel"' + ( windowRemainingMs( id ) > 0 ? '' : ' open' ) + '><summary>Şablon mesajı</summary>' +
 				'<p>24 saatlik yanıt süresi dolduğunda da onaylı şablon gönderebilirsiniz.</p>' +
 				'<div id="bc-template-content">Şablonlar yükleniyor…</div></details>' +
-				'<div class="bc-window-timer" id="bc-window-timer" role="timer"></div>' +
+				'<div class="bc-window-timer" id="bc-window-timer" role="timer"></div>' ) +
 				'<form class="bc-thread__composer" id="bc-composer">' +
-				'<textarea id="bc-body" rows="2" placeholder="Mesaj yazın…"></textarea>' +
+				'<textarea id="bc-body" rows="2" placeholder="' + ( sms ? 'SMS yazın…' : 'Mesaj yazın…' ) + '"></textarea>' +
 				'<button type="submit" class="button button-primary" id="bc-send-btn">Gönder</button>' +
 				'</form>';
 
 			updateWindowTimer();
 
-			renderTemplateForm(
-				document.getElementById( 'bc-template-content' ),
-				function ( template, values ) {
-					return post( 'bahrco_send_template', {
-						conversation_id: id, template_id: template.id, params: JSON.stringify( values ),
-					} );
-				},
-				function () {
-					loadThread( id );
-					loadConversations();
-				},
-				function () { return version !== state.threadVersion; }
-			);
+			if ( sms ) {
+				var countEl = document.getElementById( 'bc-sms-count' );
+				document.getElementById( 'bc-body' ).addEventListener( 'input', function ( e ) {
+					countEl.textContent = e.target.value.length + ' karakter';
+				} );
+				document.getElementById( 'bc-send-btn' ).disabled = ! headers.length;
+			}
+
+			if ( ! sms ) {
+				renderTemplateForm(
+					document.getElementById( 'bc-template-content' ),
+					function ( template, values ) {
+						return post( 'bahrco_send_template', {
+							conversation_id: id, template_id: template.id, params: JSON.stringify( values ),
+						} );
+					},
+					function () {
+						loadThread( id );
+						loadConversations();
+					},
+					function () { return version !== state.threadVersion; }
+				);
+			}
 
 			var box = document.getElementById( 'bc-thread-messages' );
 			box.scrollTop = box.scrollHeight;
@@ -323,12 +356,15 @@
 				e.preventDefault();
 				var ta = document.getElementById( 'bc-body' );
 				var body = ta.value.trim();
-				if ( ! body || windowRemainingMs( id ) <= 0 ) {
+				if ( ! body || ( ! sms && windowRemainingMs( id ) <= 0 ) ) {
 					return;
 				}
+				var headerEl = document.getElementById( 'bc-sender-header' );
 				ta.disabled = true;
 				ta.dataset.sending = '1';
-				post( 'bahrco_send_message', { conversation_id: id, body: body } ).then( function ( r ) {
+				post( 'bahrco_send_message', {
+					conversation_id: id, body: body, sender_header: sms && headerEl ? headerEl.value : '',
+				} ).then( function ( r ) {
 					ta.disabled = false;
 					delete ta.dataset.sending;
 					if ( r.ok ) {
@@ -358,6 +394,17 @@
 			} );
 			b.classList.add( 'is-active' );
 			state.status = b.getAttribute( 'data-status' );
+			loadConversations();
+		} );
+	} );
+
+	inbox.querySelectorAll( '.bc-channel' ).forEach( function ( b ) {
+		b.addEventListener( 'click', function () {
+			inbox.querySelectorAll( '.bc-channel' ).forEach( function ( x ) {
+				x.classList.remove( 'is-active' );
+			} );
+			b.classList.add( 'is-active' );
+			state.channel = b.getAttribute( 'data-channel' );
 			loadConversations();
 		} );
 	} );

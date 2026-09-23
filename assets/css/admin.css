@@ -53,6 +53,50 @@
 	background: #16a34a;
 	color: #fff;
 }
+.bc-channel {
+	flex: 1;
+	padding: 4px 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+	font-size: 12px;
+	color: #50575e;
+}
+.bc-channel.is-active {
+	border-color: #16a34a;
+	color: #15803d;
+	font-weight: 600;
+}
+.bc-channel-tag {
+	display: inline-block;
+	margin-right: 4px;
+	padding: 0 4px;
+	border-radius: 3px;
+	font-size: 10px;
+	font-weight: 700;
+	vertical-align: middle;
+}
+.bc-channel-tag--sms {
+	background: #dbeafe;
+	color: #1d4ed8;
+}
+.bc-channel-tag--whatsapp {
+	background: #dcfce7;
+	color: #15803d;
+}
+.bc-sms-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px 0;
+	font-size: 12px;
+	color: #50575e;
+}
+.bc-sms-header__count {
+	margin-left: auto;
+	color: #8c8f94;
+}
 
 .bc-inbox__conversations {
 	flex: 1;
