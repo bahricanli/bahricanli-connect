@@ -19,6 +19,7 @@ the WordPress admin area, through the Message Manager platform
 * Shared team inbox — incoming and outgoing WhatsApp messages
 * SMS conversations in the same inbox (SMS accounts connected on Message Manager),
   with a WhatsApp / SMS filter and sender name (short name) selection for replies
+* Send a new SMS to any phone number, and see failed deliveries with the reason
 * Reply to customer conversations without leaving WordPress
 * Live 24-hour customer service window countdown
 * Send approved message templates, in a conversation or to a new phone number
@@ -46,6 +47,9 @@ What is sent to Message Manager:
 * When you filter the inbox: the selected channel (WhatsApp or SMS).
 * When you send a template: the template identifier/name and language, the variable
   values you typed, and either the conversation identifier or the recipient phone number.
+* When you send a new SMS: the recipient phone number, the message text, the selected
+  sender name and SMS account.
+* When you open the SMS form: a request for your SMS accounts and approved sender names.
 * When you archive or unarchive a conversation: the conversation identifier.
 * When you open a template form: a request for your approved template list.
 
@@ -102,6 +106,8 @@ to your WordPress database.
 = 0.1.6 =
 * SMS conversations in the inbox, with a WhatsApp / SMS channel filter and channel labels.
 * Reply to SMS conversations with a selectable sender name (short name); no 24-hour window or templates for SMS.
+* Send Message page: send a new SMS to any phone number.
+* Show the failure reason for undelivered messages (e.g. insufficient SMS credit).
 
 = 0.1.5 =
 * Show a clear notice for messages WhatsApp Cloud API does not deliver (unsupported type, e.g. copy-code verification messages) instead of "[unsupported]".

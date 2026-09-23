@@ -277,6 +277,40 @@
 	width: 100%;
 	margin: 6px 0 0;
 }
+.bc-send__channel {
+	margin: 0 0 12px;
+	padding: 0;
+	border: 0;
+}
+.bc-send__channel legend {
+	margin-bottom: 4px;
+	font-weight: 600;
+}
+.bc-send__channel label {
+	margin-right: 16px;
+}
+.bc-sms-form label,
+.bc-sms-form select,
+.bc-sms-form textarea {
+	display: block;
+	width: 100%;
+	margin: 6px 0;
+}
+.bc-sms-form .bc-sms-header__count {
+	display: block;
+	margin: 0 0 8px;
+	font-size: 12px;
+	color: #8c8f94;
+}
+.bc-msg__error {
+	display: block;
+	margin-top: 4px;
+	padding: 2px 6px;
+	border-radius: 3px;
+	background: #fee2e2;
+	color: #b91c1c;
+	font-size: 11px;
+}
 .bc-send .bc-template-form label,
 .bc-send .bc-template-form select,
 .bc-send .bc-template-form input {

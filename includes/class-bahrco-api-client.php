@@ -151,6 +151,40 @@ class BAHRCO_Api_Client {
 	}
 
 	/**
+	 * SMS hesapları ve onaylı kısa adları.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function sms_accounts() {
+		return $this->request( 'GET', '/api/v1/sms/accounts' );
+	}
+
+	/**
+	 * Telefon numarasına yeni SMS gönder.
+	 *
+	 * @param string $to             Alıcı telefon numarası.
+	 * @param string $body           Mesaj metni.
+	 * @param string $sender_header  Kısa ad (boşsa hesabın varsayılanı).
+	 * @param int    $sms_account_id SMS hesabı (0 ise ilk hesap).
+	 * @return array|WP_Error
+	 */
+	public function send_sms( $to, $body, $sender_header = '', $sms_account_id = 0 ) {
+		$data = array(
+			'to'   => $to,
+			'body' => $body,
+		);
+
+		if ( '' !== $sender_header ) {
+			$data['sender_header'] = $sender_header;
+		}
+		if ( $sms_account_id > 0 ) {
+			$data['sms_account_id'] = (int) $sms_account_id;
+		}
+
+		return $this->request( 'POST', '/api/v1/sms/messages', $data );
+	}
+
+	/**
 	 * Ham HTTP isteği.
 	 *
 	 * @param string $method GET|POST.

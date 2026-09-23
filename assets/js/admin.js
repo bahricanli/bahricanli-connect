@@ -152,10 +152,116 @@
 		} );
 	}
 
-	/* ----- Mesaj Gönder: numaraya şablonla yeni mesaj ----- */
+	/**
+	 * Numaraya yeni SMS formu: hesap (birden fazlaysa), kısa ad, metin.
+	 */
+	function renderSmsForm( container, toInput ) {
+		container.textContent = 'SMS hesapları yükleniyor…';
+		post( 'bahrco_sms_accounts', {} ).then( function ( res ) {
+			if ( ! res.ok ) {
+				container.textContent = errorMessage( res, 'SMS hesapları yüklenemedi. Sayfayı yenileyerek deneyin.' );
+				return;
+			}
+			var accounts = ( res.json.data && res.json.data.data ) || [];
+			if ( ! accounts.length ) {
+				container.textContent = 'Bağlı SMS hesabı yok. Message Manager panelinde Ayarlar › SMS ekranından hesap bağlayın.';
+				return;
+			}
+			container.innerHTML = '<form class="bc-sms-form">' +
+				( accounts.length > 1
+					? '<label>SMS hesabı<select class="bc-sms-account">' + accounts.map( function ( a, index ) {
+						return '<option value="' + index + '">' + esc( a.name ) + '</option>';
+					} ).join( '' ) + '</select></label>'
+					: '' ) +
+				'<label>Kısa ad<select class="bc-sms-header" required></select></label>' +
+				'<label>Mesaj<textarea rows="4" maxlength="918" required></textarea></label>' +
+				'<span class="bc-sms-header__count">0 karakter</span>' +
+				'<p class="bc-template-error" role="alert"></p>' +
+				'<p class="bc-template-success" role="status"></p>' +
+				'<button type="submit" class="button button-primary">SMS gönder</button></form>';
+
+			var form = container.querySelector( 'form' );
+			var accountSelect = form.querySelector( '.bc-sms-account' );
+			var headerSelect = form.querySelector( '.bc-sms-header' );
+			var textarea = form.querySelector( 'textarea' );
+			var count = form.querySelector( '.bc-sms-header__count' );
+			var error = form.querySelector( '.bc-template-error' );
+			var success = form.querySelector( '.bc-template-success' );
+			var button = form.querySelector( 'button' );
+
+			function account() {
+				return accounts[ accountSelect ? Number( accountSelect.value ) : 0 ];
+			}
+			function fillHeaders() {
+				var a = account();
+				var headers = a.sender_headers || [];
+				headerSelect.innerHTML = headers.length
+					? headers.map( function ( h ) {
+						return '<option value="' + esc( h ) + '"' + ( h === a.sender_header ? ' selected' : '' ) + '>' + esc( h ) + '</option>';
+					} ).join( '' )
+					: '<option value="">Onaylı kısa ad yok</option>';
+				headerSelect.disabled = ! headers.length;
+				button.disabled = ! headers.length;
+			}
+
+			fillHeaders();
+			if ( accountSelect ) accountSelect.addEventListener( 'change', fillHeaders );
+			textarea.addEventListener( 'input', function () {
+				count.textContent = textarea.value.length + ' karakter';
+			} );
+
+			form.addEventListener( 'submit', function ( event ) {
+				event.preventDefault();
+				error.textContent = '';
+				success.textContent = '';
+				if ( ! toInput.reportValidity() || ! form.reportValidity() ) return;
+
+				var to = toInput.value.trim();
+				button.disabled = true;
+				button.textContent = 'Gönderiliyor…';
+				post( 'bahrco_send_new_sms', {
+					to: to, body: textarea.value.trim(), sender_header: headerSelect.value, sms_account_id: account().id,
+				} ).then( function ( r ) {
+					if ( r.ok ) {
+						textarea.value = '';
+						count.textContent = '0 karakter';
+						toInput.value = '';
+						success.textContent = '✓ SMS sağlayıcıya iletildi: ' + to + ' — teslim durumu Gelen Kutusu\'nda görünür.';
+					} else {
+						error.textContent = errorMessage( r, 'SMS gönderilemedi.' );
+					}
+				} ).catch( function () {
+					error.textContent = 'Bağlantı hatası. Gönderim durumunu kontrol edin.';
+				} ).finally( function () {
+					button.disabled = false;
+					button.textContent = 'SMS gönder';
+				} );
+			} );
+		} ).catch( function () {
+			container.textContent = 'SMS hesapları yüklenemedi. Sayfayı yenileyerek deneyin.';
+		} );
+	}
+
+	/* ----- Mesaj Gönder: numaraya şablonla (WhatsApp) ya da SMS ile yeni mesaj ----- */
 	var sendPage = document.getElementById( 'bc-send' );
 	if ( sendPage ) {
 		var toInput = document.getElementById( 'bc-send-to' );
+		var templateBox = document.getElementById( 'bc-send-template' );
+		var smsBox = document.getElementById( 'bc-send-sms' );
+		var smsLoaded = false;
+
+		sendPage.querySelectorAll( 'input[name="bc-send-channel"]' ).forEach( function ( radio ) {
+			radio.addEventListener( 'change', function () {
+				var sms = 'sms' === radio.value && radio.checked;
+				templateBox.hidden = sms;
+				smsBox.hidden = ! sms;
+				if ( sms && ! smsLoaded ) {
+					smsLoaded = true;
+					renderSmsForm( smsBox, toInput );
+				}
+			} );
+		} );
+
 		renderTemplateForm(
 			document.getElementById( 'bc-send-template' ),
 			function ( template, values ) {
@@ -274,7 +380,10 @@
 				var text = m.body || ( 'unsupported' === m.type
 					? '⚠ Bu mesaj türü WhatsApp Cloud API tarafından desteklenmiyor; Meta içeriğini iletmedi (ör. kopyalanabilir doğrulama kodu mesajları).'
 					: '[' + m.type + ']' );
-				return '<div class="bc-msg bc-msg--' + dir + '"><span>' + esc( text ) + '</span></div>';
+				var failed = 'failed' === m.status && m.error
+					? '<span class="bc-msg__error">İletilemedi: ' + esc( m.error ) + '</span>'
+					: '';
+				return '<div class="bc-msg bc-msg--' + dir + '"><span>' + esc( text ) + failed + '</span></div>';
 			} ).join( '' );
 			var conversation = state.conversations[ id ] || {};
 			var archived = !! conversation.archived_at;

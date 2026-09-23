@@ -27,6 +27,8 @@ class BAHRCO_Ajax {
 		add_action( 'wp_ajax_bahrco_send_template', array( $this, 'send_template' ) );
 		add_action( 'wp_ajax_bahrco_archive', array( $this, 'archive' ) );
 		add_action( 'wp_ajax_bahrco_send_new_template', array( $this, 'send_new_template' ) );
+		add_action( 'wp_ajax_bahrco_sms_accounts', array( $this, 'sms_accounts' ) );
+		add_action( 'wp_ajax_bahrco_send_new_sms', array( $this, 'send_new_sms' ) );
 	}
 
 	/**
@@ -222,5 +224,33 @@ class BAHRCO_Ajax {
 		$params = $this->template_params( $missing );
 
 		$this->respond( ( new BAHRCO_Api_Client() )->send_template_to( $to, $template, $language, $params ) );
+	}
+
+	/**
+	 * SMS hesapları ve kısa adları.
+	 */
+	public function sms_accounts() {
+		$this->guard();
+		$this->respond( ( new BAHRCO_Api_Client() )->sms_accounts() );
+	}
+
+	/**
+	 * Telefon numarasına yeni SMS gönder.
+	 */
+	public function send_new_sms() {
+		$this->guard();
+
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce, self::guard() içinde doğrulanır.
+		$to             = isset( $_POST['to'] ) ? sanitize_text_field( wp_unslash( $_POST['to'] ) ) : '';
+		$body           = isset( $_POST['body'] ) ? sanitize_textarea_field( wp_unslash( $_POST['body'] ) ) : '';
+		$sender_header  = isset( $_POST['sender_header'] ) ? sanitize_text_field( wp_unslash( $_POST['sender_header'] ) ) : '';
+		$sms_account_id = isset( $_POST['sms_account_id'] ) ? absint( wp_unslash( $_POST['sms_account_id'] ) ) : 0;
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+
+		if ( '' === trim( $to ) || '' === trim( $body ) ) {
+			wp_send_json_error( array( 'message' => __( 'Telefon numarası ve mesaj gerekli.', 'bahricanli-connect' ) ), 400 );
+		}
+
+		$this->respond( ( new BAHRCO_Api_Client() )->send_sms( $to, $body, $sender_header, $sms_account_id ) );
 	}
 }
