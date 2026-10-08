@@ -3,7 +3,7 @@
  * Ayarlar sayfası görünümü.
  *
  * @package BahriCanliConnect
- * @var array $settings api_base, api_key
+ * @var array $settings api_base, api_key, notify_enabled, notify_email
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,6 +64,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php esc_html_e( 'Bağlantıyı test et', 'bahricanli-connect' ); ?>
 					</button>
 					<span id="bc-test-result" class="bc-test-result"></span>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'E-posta bildirimi', 'bahricanli-connect' ); ?></th>
+				<td>
+					<label for="bahrco_notify_enabled">
+						<input
+							type="checkbox"
+							id="bahrco_notify_enabled"
+							name="bahricanli_connect_settings[notify_enabled]"
+							value="1"
+							<?php checked( $settings['notify_enabled'] ); ?>
+						/>
+						<?php esc_html_e( 'Yeni mesaj geldiğinde e-posta gönder', 'bahricanli-connect' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'Yaklaşık 5 dakikada bir denetlenir (WP-Cron). E-postada yalnız kimin yazdığı yer alır, mesaj içeriği gönderilmez.', 'bahricanli-connect' ); ?>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="bahrco_notify_email"><?php esc_html_e( 'Bildirim e-postası', 'bahricanli-connect' ); ?></label>
+				</th>
+				<td>
+					<input
+						type="text"
+						id="bahrco_notify_email"
+						name="bahricanli_connect_settings[notify_email]"
+						class="regular-text"
+						value="<?php echo esc_attr( $settings['notify_email'] ); ?>"
+						placeholder="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>"
+					/>
+					<p class="description">
+						<?php esc_html_e( 'Boş bırakılırsa site yönetici e-postası kullanılır. Birden çok adres virgülle ayrılır.', 'bahricanli-connect' ); ?>
+					</p>
 				</td>
 			</tr>
 		</table>

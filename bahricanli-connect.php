@@ -3,7 +3,7 @@
  * Plugin Name:       BahriCanli Connect
  * Plugin URI:        https://message-manager.tr/wordpress-plugin
  * Description:        WhatsApp Business team inbox for WordPress. Connects to the Message Manager platform to read and reply to customer conversations.
- * Version:           0.1.6
+ * Version:           0.1.7
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Bahri Canlı
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BAHRICANLI_CONNECT_VERSION', '0.1.6' );
+define( 'BAHRICANLI_CONNECT_VERSION', '0.1.7' );
 define( 'BAHRICANLI_CONNECT_FILE', __FILE__ );
 define( 'BAHRICANLI_CONNECT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BAHRICANLI_CONNECT_URL', plugin_dir_url( __FILE__ ) );
@@ -29,6 +29,7 @@ define( 'BAHRICANLI_CONNECT_DEFAULT_API', 'https://message-manager.tr' );
 require_once BAHRICANLI_CONNECT_DIR . 'includes/class-bahrco-api-client.php';
 require_once BAHRICANLI_CONNECT_DIR . 'includes/class-bahrco-ajax.php';
 require_once BAHRICANLI_CONNECT_DIR . 'includes/class-bahrco-admin.php';
+require_once BAHRICANLI_CONNECT_DIR . 'includes/class-bahrco-notifier.php';
 require_once BAHRICANLI_CONNECT_DIR . 'includes/class-bahrco-plugin.php';
 
 /**
@@ -39,3 +40,5 @@ function bahricanli_connect() {
 }
 
 bahricanli_connect();
+
+register_deactivation_hook( __FILE__, array( 'BAHRCO_Notifier', 'unschedule' ) );

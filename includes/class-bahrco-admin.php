@@ -104,6 +104,10 @@ class BAHRCO_Admin {
 			$out['api_base'] = BAHRICANLI_CONNECT_DEFAULT_API;
 		}
 
+		$out['notify_enabled'] = ! empty( $input['notify_enabled'] ) ? 1 : 0;
+		$emails                = isset( $input['notify_email'] ) ? explode( ',', (string) $input['notify_email'] ) : array();
+		$out['notify_email']   = implode( ', ', array_filter( array_map( 'sanitize_email', $emails ) ) );
+
 		return $out;
 	}
 

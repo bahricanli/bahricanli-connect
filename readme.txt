@@ -4,7 +4,7 @@ Tags: whatsapp, sms, business messaging, inbox, customer support
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.1.6
+Stable tag: 0.1.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,7 @@ the WordPress admin area, through the Message Manager platform
 * Live 24-hour customer service window countdown
 * Send approved message templates, in a conversation or to a new phone number
 * Archive conversations
+* Optional email notification when a new message arrives
 
 The plugin is a thin client. It stores no message data of its own. All business
 logic and the connection to the Meta WhatsApp Business Platform (Cloud API) run on
@@ -36,7 +37,9 @@ browser.
 This plugin connects to one external service: the **Message Manager API** at
 `https://message-manager.tr`. A connection is made only after you enter an API key
 on the plugin settings screen, and only while a logged-in administrator is using
-the plugin's screens (Settings, Inbox, Send Message).
+the plugin's screens (Settings, Inbox, Send Message). If you turn on the optional
+email notification, the plugin also requests your conversation list in the
+background about every 5 minutes (WP-Cron) to detect new incoming messages.
 
 What is sent to Message Manager:
 
@@ -59,6 +62,10 @@ What is received from Message Manager and shown in wp-admin:
   unread count) and, for SMS conversations, the approved sender names of the SMS account.
 * The messages of a conversation you open (text, direction, delivery status, timestamps).
 * Your approved message templates (name, language, body text).
+
+The optional notification email is sent by your own WordPress site (`wp_mail`) to the
+address you set (default: the site admin email). It contains the contact name/number,
+channel and time of the conversations with new messages — never the message text.
 
 Message Manager, in turn, communicates with the Meta WhatsApp Business Platform
 (Cloud API) and with the SMS provider you connected on Message Manager (for example
@@ -102,6 +109,9 @@ to your WordPress database.
 2. Settings — enter the Message Manager API address and per-account API key, test the connection.
 
 == Changelog ==
+
+= 0.1.7 =
+* Optional email notification when a new WhatsApp or SMS message arrives (Settings > E-posta bildirimi). Checked about every 5 minutes; the email lists who wrote, not the message text.
 
 = 0.1.6 =
 * SMS conversations in the inbox, with a WhatsApp / SMS channel filter and channel labels.

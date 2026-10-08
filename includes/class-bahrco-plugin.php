@@ -32,6 +32,11 @@ final class BAHRCO_Plugin {
 	public $ajax;
 
 	/**
+	 * @var BAHRCO_Notifier
+	 */
+	public $notifier;
+
+	/**
 	 * Tekil erişim.
 	 *
 	 * @return BAHRCO_Plugin
@@ -51,10 +56,13 @@ final class BAHRCO_Plugin {
 		$this->admin = new BAHRCO_Admin();
 		$this->ajax  = new BAHRCO_Ajax();
 
+		$this->notifier = new BAHRCO_Notifier();
+
 		add_filter( 'plugin_action_links_' . plugin_basename( BAHRICANLI_CONNECT_FILE ), array( $this, 'action_links' ) );
 
 		$this->admin->register();
 		$this->ajax->register();
+		$this->notifier->register();
 	}
 
 	/**
@@ -78,7 +86,7 @@ final class BAHRCO_Plugin {
 	/**
 	 * Kayıtlı ayarlar.
 	 *
-	 * @return array{api_base:string, api_key:string}
+	 * @return array{api_base:string, api_key:string, notify_enabled:bool, notify_email:string}
 	 */
 	public static function settings() {
 		$opts = get_option( 'bahricanli_connect_settings', array() );
@@ -86,6 +94,9 @@ final class BAHRCO_Plugin {
 		return array(
 			'api_base' => ! empty( $opts['api_base'] ) ? untrailingslashit( $opts['api_base'] ) : BAHRICANLI_CONNECT_DEFAULT_API,
 			'api_key'  => isset( $opts['api_key'] ) ? (string) $opts['api_key'] : '',
+
+			'notify_enabled' => ! empty( $opts['notify_enabled'] ),
+			'notify_email'   => isset( $opts['notify_email'] ) ? (string) $opts['notify_email'] : '',
 		);
 	}
 
